@@ -1,0 +1,12 @@
+Simple phone number encoder written in Ruby
+
+Usage:
+
+  ruby numbers.rb <dictionary> <numbers>
+
+  <dictionary> - dictionary file, which contains possible words to be used during encoding
+  <numbers>    - files containing list of phone numbers to encode
+
+Note:
+
+Dictionary is assumed to be in lowercase. No case-insensitivity was made. Just a test :)
