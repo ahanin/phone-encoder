@@ -19,7 +19,7 @@ require 'encoder'
 dictionary = Dictionary.load_from(dict_filepath)
 
 File.open(numbers_filepath) do |numbers_file|
-    Encoder.new(dictionary).for_each_in numbers_file do |number|
-        puts number
+    Encoder.new(dictionary).for_each_in numbers_file do |number, encoded|
+        puts "#{number}: #{encoded}"
     end
 end

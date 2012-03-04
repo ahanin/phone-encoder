@@ -6,24 +6,29 @@ class Encoder
     
     def for_each_in (io, &callback)
         io.each { |line|
+            number = line.rstrip
             digits = []
-            line.rstrip.scan( /\d/ ) do |c|
+            number.scan( /\d/ ) do |c|
                 digits << c.to_i
             end
-            encode_number callback, digits
+
+            if !digits.empty? then
+                encode_number callback, number, digits
+            end
         }
     end
     
     private 
     
-    def encode_number (callback, digits, string_so_far = "", left = 0, right = digits.length,
+    def encode_number (callback, number, digits,
+                                        string_so_far = "", left = 0, right = digits.length,
                                         words_found = 0, last_was_digit = false)
         while left < digits.length
             while right > left
                 words = @dict.find_words(digits, left, right)
                 words.each do |word|
                     next_string =  string_so_far + (left > 0 ? '-' : '' ) + word
-                    encode_number callback, digits, next_string, left + word.length, digits.length, words_found + 1
+                    encode_number callback, number, digits, next_string, left + word.length, digits.length, words_found + 1
                 end
                 right -= 1
             end
@@ -40,7 +45,7 @@ class Encoder
         end
         
         if words_found > 0 then
-            callback.call string_so_far
+            callback.call number, string_so_far
         end
     end
 
