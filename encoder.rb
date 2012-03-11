@@ -23,23 +23,20 @@ class Encoder
     def encode_number (callback, number, digits,
                                         string_so_far = "", left = 0, right = digits.length,
                                         words_found = 0, last_was_digit = false)
-        while left < digits.length
-            while right > left
-                words = @dict.find_words(digits, left, right)
+        (left..digits.length).each do |left_bound|
+            digits.length.downto(left_bound + 1) do |right_bound|
+                words = @dict.find_words(digits, left_bound, right_bound)
                 words.each do |word|
-                    next_string =  string_so_far + (left > 0 ? '-' : '' ) + word
-                    encode_number callback, number, digits, next_string, left + word.length, digits.length, words_found + 1
+                    next_string =  string_so_far + (left_bound > 0 ? '-' : '' ) + word
+                    encode_number callback, number, digits, next_string, left_bound + word.length, digits.length, words_found + 1
                 end
-                right -= 1
             end
             
-            if left > 0 && !last_was_digit then
+            if left_bound > 0 && !last_was_digit then
                 string_so_far += '-'
             end
             
-            string_so_far += digits[left].to_s
-            left += 1
-            right = digits.length
+            string_so_far += digits[left_bound].to_s
             last_was_digit = true
             
         end
